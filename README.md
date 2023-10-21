@@ -12,5 +12,5 @@ words seen online, rather than in books.
 
 
 ## Attribution:
-  unigram_freq.txt is from https://www.kaggle.com/datasets/rtatman/english-word-frequency/
-  scrabble_words.txt is from https://raw.githubusercontent.com/redbo/scrabble/master/dictionary.txt
+ *  `unigram_freq.txt`: from https://www.kaggle.com/datasets/rtatman/english-word-frequency/
+ *  `scrabble_words.txt`: is from https://raw.githubusercontent.com/redbo/scrabble/master/dictionary.txt
