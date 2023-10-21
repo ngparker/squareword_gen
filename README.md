@@ -3,7 +3,7 @@ This is a set of experimenal algorithms to generate valid
 NxN squares of words, where both columns and row are words
 from a given dictionary.
 
-It was inspired by squareword.com.
+It was inspired by squareword.com, and an algorithm from Annalee Flower Horne.
 
 ## TODO
 * Get a better word-frequency list. This one seems to lean very heavily towards

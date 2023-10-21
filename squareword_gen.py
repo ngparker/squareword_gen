@@ -197,7 +197,6 @@ def GenSubSquares(word_trie, start_word, column_trie_nodes=[], log_prefix=[]):
     if column_trie_nodes[0] == True:
         log.log("   EOS: END OF SQUARE")
         yield []
-        log.log("   EOS: END OF SQUARE --> post yeild")
         return
 
     # N lists of unique chars, taken from each of those nodes
@@ -229,9 +228,7 @@ def GenSubSquares(word_trie, start_word, column_trie_nodes=[], log_prefix=[]):
             new_sub_square = [row_word_to_try] + sub_square
             log.log(" SS: yeilding [%s]" % (" / ".join(new_sub_square)))
             yield new_sub_square
-            log.log(" SS: yeilded [%s]" % (" / ".join(new_sub_square)))
 
-    log.log("-- End of Func --")
 
 
 def main():
