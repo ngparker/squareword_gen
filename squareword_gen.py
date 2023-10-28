@@ -14,6 +14,7 @@ import time
 
 LOG_DETAILS = False
 
+
 class Logger:
     """A simple logger class that lets you set a prefix string.
     """
@@ -70,33 +71,33 @@ def GetWorkingWords(freq_csv_file, scrabble_words_file, top_n, word_len):
 
 
 class WordTrie(dict):
-  """ Datastructure holding a trie of words all the same length.
-    
-    This is stored as as a dict of single chars, each pointing to a trie,
-    making up valid words.  The last char of a word has a value of "True"
-    rather than another dict.  
-    
-    I tried another implementation that uses 26-element arrays in stead of
-    dicts, but it's 3x slower for some reason (Python's dicts are fast).
-  """
+    """ Datastructure holding a trie of words all the same length.
 
-  def __init__(self, word_list):
-      """
-        Generate and store the trie.
+      This is stored as as a dict of single chars, each pointing to a trie,
+      making up valid words.  The last char of a word has a value of "True"
+      rather than another dict.  
 
-        Args:
-          word_list: list of strings N-chars long, used to generate the trie.
-      """
-      for word in word_list:
-          # Start at the root for each word
-          cur_trie = self
+      I tried another implementation that uses 26-element arrays in stead of
+      dicts, but it's 3x slower for some reason (Python's dicts are fast).
+    """
 
-          # Create a dict for each node of the trie for all but the last letter
-          # This traverses down the tree.
-          for letter in word[:-1]:
-              cur_trie = cur_trie.setdefault(letter, WordTrie([]))
-          # The last leaf node is a "bool True" rather than an empty WordTrie.
-          cur_trie.setdefault(word[-1], True)
+    def __init__(self, word_list):
+        """
+          Generate and store the trie.
+
+          Args:
+            word_list: list of strings N-chars long, used to generate the trie.
+        """
+        for word in word_list:
+            # Start at the root for each word
+            cur_trie = self
+
+            # Create a dict for each node of the trie for all but the last letter
+            # This traverses down the tree.
+            for letter in word[:-1]:
+                cur_trie = cur_trie.setdefault(letter, WordTrie([]))
+            # The last leaf node is a "bool True" rather than an empty WordTrie.
+            cur_trie.setdefault(word[-1], True)
 
 
 def GenWordsFromValidChars(word_trie, valid_next_row_chars):
@@ -112,12 +113,12 @@ def GenWordsFromValidChars(word_trie, valid_next_row_chars):
     # Iterate over all the chars in position zero, and see if they're
     # in the trie. If so, see if we can make a word.
 
-    #depth = len(valid_next_row_chars)  # this is inverse depth, really
-    #print("  G: -- Called with %d positions left" % depth)
+    # depth = len(valid_next_row_chars)  # this is inverse depth, really
+    # print("  G: -- Called with %d positions left" % depth)
     for char_to_try in valid_next_row_chars[0]:
         if char_to_try not in word_trie:
             # No word down this part of the trie
-            #print("  G%d: %s not in trie" % (depth, char_to_try))
+            # print("  G%d: %s not in trie" % (depth, char_to_try))
             continue
 
         this_node = word_trie.get(char_to_try)
@@ -125,11 +126,11 @@ def GenWordsFromValidChars(word_trie, valid_next_row_chars):
         # Check if it's a leaf node (they're == True rather than a dict)
         # Then this is the last char in the word.
         if this_node == True:
-            #print("  G%d:   Yielding EOW %s" % (depth, char_to_try))
+            # print("  G%d:   Yielding EOW %s" % (depth, char_to_try))
             yield char_to_try
             continue
 
-        #print("  G%d: recusing down %s" % (depth, char_to_try))
+        # print("  G%d: recusing down %s" % (depth, char_to_try))
         # Otherwise, recurse. If this call has no items,
         # then there's no valid suffix from here on, so we won't
         # use this char_to_try.
@@ -211,7 +212,6 @@ def GenSubSquares(word_trie, start_word, column_trie_nodes=[], log_prefix=[]):
     log.log("valid_next_row_chars = %s" % ('-'.join([''.join(charlist) for charlist in
             valid_next_row_chars])))
 
-
     # Look at all the valid words using the set of possible chars,
     # and see if there's a square that could be made from that word.
     for row_word_to_try in GenWordsFromValidChars(word_trie, valid_next_row_chars):
@@ -243,9 +243,9 @@ def IsDoubleSquare(sq):
 
 def WordsAreUnique(sq, is_double_square):
     """Figure out if there are any shared words in rows + cols.
-    
+
     If not is_double_square, this'll look at just rows.
-    """ 
+    """
 
     words = set()
     for i, row_word in enumerate(sq):
@@ -279,12 +279,12 @@ def DoSomeBenchmarking(working_words, word_trie):
     target_time = start_time + 10  # 10 seconds
     while time.time() < target_time:
         for sq in GenSquares(word_trie, working_words[pos]):
-          squares += 1
+            squares += 1
 
         pos += 1
         if pos >= len(working_words):
-          pos = 0
-   
+            pos = 0
+
     dur = time.time() - start_time
     print("Ran %d squares in %.1f sec, or %.0f squares/sec" % (squares, dur,
           squares / dur))
@@ -307,7 +307,8 @@ def main():
     # Knobs
     parser.add_argument('--top_n', type=int, default=5000,
                         help="Cutoff for N most popular words to use")
-    parser.add_argument('--word_len', type=int, default=5, help="Len of words to use")
+    parser.add_argument('--word_len', type=int, default=5,
+                        help="Len of words to use")
     parser.add_argument('--double_squares_only', action="store_true",
                         help="Print only valid double squares")
 
@@ -324,8 +325,8 @@ def main():
     word_trie = WordTrie(working_words)
 
     if args.just_benchmark:
-      DoSomeBenchmarking(working_words, word_trie)
-      return
+        DoSomeBenchmarking(working_words, word_trie)
+        return
 
     # Example valid 6x6 square:
     #  market
@@ -343,7 +344,7 @@ def main():
             is_double_square = IsDoubleSquare(sq)
             words_are_unique = WordsAreUnique(sq, is_double_square)
             if args.double_squares_only and (not is_double_square
-                    or not words_are_unique):
+                                             or not words_are_unique):
                 continue
             desc = "WordSquare %d from word %d/%d: %s-word-square, %s" % (
                 sq_num, word_num, len(working_words),
