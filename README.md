@@ -2,7 +2,7 @@
 This is an experiment to try generatating valid NxN squares of words,
 where both columns and row are words from a given dictionary.
 
-It was inspired by the squareword.com game, and an algorithm from Annalee Flower Horne.
+It was inspired by the squareword.com game, and an algorithm from [@annalee]([https://pages.github.com/](https://github.com/annalee))
 
 It outputs things like this:
 
